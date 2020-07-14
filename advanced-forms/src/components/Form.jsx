@@ -8,7 +8,7 @@ const formSchema = Yup.object().shape({
   tos: Yup.boolean().oneOf([true], "You must accept Terms and Conditions"),
 });
 
-const Form = () => {
+const Form = ({ submitForm }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -28,15 +28,11 @@ const Form = () => {
   const inputChange = (e) => {
     e.persist();
 
-    let valueToTest = false;
+    let valueToTest = e.target.value;
 
     if (e.target.type === "checkbox")
       if (e.target.value === "on") valueToTest = true;
       else valueToTest = false;
-    else valueToTest = e.target.value;
-
-    // const checkbox = e.target.type === "checkbox" && e.target.value === "on" ? true : false;
-    // const valueToTest = e.target.type === "checkbox" ? checkbox : e.target.value;
 
     Yup.reach(formSchema, e.target.name)
       .validate(valueToTest)
@@ -62,7 +58,7 @@ const Form = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    submitForm(formData);
   };
 
   useEffect(() => {
