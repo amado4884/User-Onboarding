@@ -15,12 +15,17 @@ code {
 div.adv-form form {
   display: flex;
   flex-direction: column;
-  width: 300px;
+  width: 500px;
   margin: auto;
 }
 
-div.adv-form form input {
+div.adv-form form input,
+div.adv-form form select {
   margin: 5px;
+}
+
+div.adv-form form select {
+  text-align: center;
 }
 
 div.adv-form form span.error {
@@ -30,7 +35,7 @@ div.adv-form form span.error {
 div.user {
   display: flex;
   flex-direction: column;
-  width: 300px;
+  width: 500px;
   margin: 20px auto;
   background-color: darksalmon;
 }

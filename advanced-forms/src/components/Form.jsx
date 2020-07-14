@@ -3,25 +3,37 @@ import * as Yup from "yup";
 
 const formSchema = Yup.object().shape({
   name: Yup.string().min(3, "Must be at least 3 characters.").required("Must include a name."),
-  email: Yup.string().email("Must be a valid email address.").required("Must include email address."),
+  email: Yup.string()
+    .email("Must be a valid email address.")
+    .required("Must include email address.")
+    .notOneOf(["waffle@syrup.com"], "That email is already taken."),
   password: Yup.string().min(6, "Passwords must be at least 6 characters long.").required("Password is Required"),
+  role: Yup.string()
+    .required("Role is required")
+    .oneOf(
+      ["Front End Developer", "Back End Developer", "Full Stack Developer"],
+      "Role can only be: Front End Developer, Back End Developer, or Full Stack Developer."
+    ),
+  startDate: Yup.date().required("You must provide a start date."),
+  endDate: Yup.date().required("You must provide a end date."),
+  reason: Yup.string().required("A reason must be provided"),
   tos: Yup.boolean().oneOf([true], "You must accept Terms and Conditions"),
 });
 
 const Form = ({ submitForm }) => {
-  const [formData, setFormData] = useState({
+  const defaultFormState = {
     name: "",
     email: "",
     password: "",
+    role: "",
+    startDate: "",
+    endDate: "",
+    reason: "",
     tos: false,
-  });
+  };
+  const [formData, setFormData] = useState({ ...defaultFormState });
 
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    password: "",
-    tos: "",
-  });
+  const [errors, setErrors] = useState({ ...defaultFormState, tos: "" });
 
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
@@ -59,6 +71,7 @@ const Form = ({ submitForm }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     submitForm(formData);
+    setFormData({ ...defaultFormState });
   };
 
   useEffect(() => {
@@ -83,6 +96,25 @@ const Form = ({ submitForm }) => {
           onChange={inputChange}
         />
         <span className="error">{errors.password}</span>
+        <select name="role" onChange={inputChange}>
+          <option value="">ROLE</option>
+          <option value="Front End Developer">Front End Developer</option>
+          <option value="Back End Developer">Back End Developer</option>
+          <option value="Full Stack Developer">Full Stack Developer</option>
+        </select>
+        <span className="error">{errors.role}</span>
+        <div>
+          <label htmlFor="startDate">Start Date:</label>
+          <input name="startDate" value={formData.startDate} type="date" onChange={inputChange} />
+          <span className="error">{errors.startDate}</span>
+        </div>
+        <div>
+          <label htmlFor="endDate">End Date:</label>
+          <input name="endDate" value={formData.endDate} type="date" onChange={inputChange} />
+          <span className="error">{errors.endDate}</span>
+        </div>
+        <input name="reason" value={formData.reason} placeholder="Reason for Joining" onChange={inputChange} />
+        <span className="error">{errors.reason}</span>
         <div className="tos">
           <label htmlFor="tos">Terms of Service</label>
           <input name="tos" type="checkbox" onChange={inputChange} />
