@@ -117,7 +117,7 @@ const Form = ({ submitForm }) => {
         <span className="error">{errors.reason}</span>
         <div className="tos">
           <label htmlFor="tos">Terms of Service</label>
-          <input name="tos" type="checkbox" onChange={inputChange} />
+          <input name="tos" type="checkbox" onChange={inputChange} checked={formData.tos} />
           <span className="error">{errors.tos}</span>
         </div>
         <input type="submit" value="Submit" disabled={buttonDisabled} />
